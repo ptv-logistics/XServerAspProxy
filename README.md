@@ -26,7 +26,7 @@ middleware that hosts the web page.
 1. Add the the XServerProxy handler code to your ASP.NET project
 2. Add a redirection rule in your [Web.config](https://github.com/ptv-logistics/XServerAspProxy/blob/master/Web.config#L14-17)
 3. Adapt the code for your xServer infrasctructure. I've added sample for 
-[xServer on-premise](https://github.com/ptv-logistics/XServerAspProxy/blob/master/XServerProxy.ashx.cs#L74-92)
-and [xServer internet](https://github.com/ptv-logistics/XServerAspProxy/blob/master/XServerProxy.ashx.cs#L61-72)
+[xServer on-premise](https://github.com/ptv-logistics/XServerAspProxy/blob/master/XServerProxy.ashx.cs#L74-93)
+and [xServer internet](https://github.com/ptv-logistics/XServerAspProxy/blob/master/XServerProxy.ashx.cs#L62-73)
 3. Make your xServer internet requests with the Proxy url, like http://localhost:53758/XServerProxy/WMS/WMS or
 http://localhost:53758/XServerProxy/xlocate/rs/XLocate/findAddressByText.
