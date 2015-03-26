@@ -35,7 +35,7 @@ namespace XServerAspProxy
 
             var original = context.Request;
             var newRequest = (HttpWebRequest)WebRequest.Create(url);
-            
+
             // in case of xserver internet or xserver /w basic auth inject your user/pwd or token
             // newRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes("xtok:" + "<your token here>"));
 
@@ -43,21 +43,26 @@ namespace XServerAspProxy
             newRequest.Method = original.HttpMethod;
 
             // copy the data for post
-            if(original.HttpMethod == "POST")
-                original.InputStream.CopyTo(newRequest.GetRequestStream());
+            if (original.HttpMethod == "POST")
+                using (var reqStream = newRequest.GetRequestStream())
+                {
+                    original.InputStream.CopyTo(reqStream);
+                }
 
             // make the request
-            var newResponse = newRequest.GetResponse();
-
-            // copy the response data
-            context.Response.ContentType = newResponse.ContentType;
-            newResponse.GetResponseStream().CopyTo(context.Response.OutputStream);
+            using (var newResponse = newRequest.GetResponse())
+            using (var respStream = newResponse.GetResponseStream())
+            {
+                // copy the response data
+                context.Response.ContentType = newResponse.ContentType;
+                respStream.CopyTo(context.Response.OutputStream);
+            }
         }
 
         public string BuildXServerInternetRequestUrl(string type, string request)
         {
             string cluster = "eu-n-test";
-            
+
             if (type.ToLower() == "wms")
             {
                 type = "xmap";

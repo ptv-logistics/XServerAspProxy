@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -57,17 +58,23 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Baufeldt.txt" />
+    <Content Include="MapData.ashx" />
+    <Content Include="README.md" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+    <Content Include="lib\helper.js" />
+    <Content Include="lib\leaflet-pip.min.js" />
+    <Content Include="lib\lunr.min.js" />
+    <Content Include="lib\NonTiledLayer.js" />
+    <Content Include="lib\NonTiledLayer.WMS.js" />
     <Content Include="XServerProxy.ashx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="baufeldt.js" />
-    <Content Include="helper.js" />
     <Content Include="icons\marker-green-2x.png" />
     <Content Include="icons\marker-green.png" />
     <Content Include="icons\marker-grey-2x.png" />
@@ -78,18 +85,18 @@
     <Content Include="icons\marker-red.png" />
     <Content Include="icons\marker-shadow.png" />
     <Content Include="index.html" />
-    <Content Include="leaflet-pip.min.js" />
-    <Content Include="lunr.min.js" />
-    <Content Include="NonTiledLayer.js" />
-    <Content Include="NonTiledLayer.WMS.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MapData.ashx.cs">
+      <DependentUpon>MapData.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XServerProxy.ashx.cs">
       <DependentUpon>XServerProxy.ashx</DependentUpon>
     </Compile>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
