@@ -8,9 +8,9 @@ For example, you can add your xserver internet token and don't have to expose it
 The web-client can still use xServer in exactly same way as it does for a direct access.
 
 The JavaScript sample-code is based on https://github.com/ptv-logistics/PoiLocator, but all calls go
-thorugh the XServerProxy.ashx rather than calling xServer internet directly. 
+through the XServerProxy.ashx rather than calling xServer internet directly. 
 
-For more samples for xServer in combination with ASP.NET, you should also take a look at 
+For more samples with xServer in combination with ASP.NET, you should also take a look at 
 https://github.com/ptv-logistics/WebFormsMap or https://github.com/ptv-logistics/SpatialTutorial.
 
 To use this code with xServer internet, you need an xServer internet subscription. 
