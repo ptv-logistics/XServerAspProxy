@@ -1,7 +1,7 @@
 # XServerAspProxy
 Relay PTV xServer Requests in your ASP.NET Middleware
 
-This can be useful when accessing xServer behind a firewall, allow cross-domain and cross-scheme calls,  
+This can be useful when accessing xServer behind a firewall, allow cross-domain and cross-scheme calls, 
 add some load-balancing or fail-over, tile-caching, etc. 
 You can also use your own authorization or inject xServer credentials inside the middleware.
 For example, you can add your xserver internet token and don't have to expose it in JavaScript.
