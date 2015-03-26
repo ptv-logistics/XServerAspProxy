@@ -28,5 +28,5 @@ middleware that hosts the web page.
 3. Adapt the code for your xServer infrasctructure. I've added sample for 
 [xServer on-premise](https://github.com/ptv-logistics/XServerAspProxy/blob/master/XServerProxy.ashx.cs#L74-93)
 and [xServer internet](https://github.com/ptv-logistics/XServerAspProxy/blob/master/XServerProxy.ashx.cs#L62-73)
-3. Make your xServer internet requests with the Proxy url, like *http://localhost:53758/XServerProxy/WMS/WMS* or
-*http://localhost:53758/XServerProxy/xlocate/rs/XLocate/findAddressByText*.
+3. Make your xServer internet requests with the Proxy url, like */XServerProxy/WMS/WMS* or
+*/XServerProxy/xlocate/rs/XLocate/findAddressByText*.

@@ -40,7 +40,7 @@
     <script type="text/javascript">
         // set up the map
         var attribution = '<a href="http://www.ptvgroup.com">PTV</a>, TOMTOM';
-        var xMapWmsUrl = 'http://localhost:53758/XServerProxy/WMS/WMS';
+        var xMapWmsUrl = '/XServerProxy/WMS/WMS';
 
         // create a map in the "map" div, set the view to a given place and zoom
         var map = new L.Map('map');
@@ -90,9 +90,9 @@
         });
 
         // url we're sending the request to
-        var isoUrl = 'http://localhost:53758/XServerProxy/xroute/rs/XRoute/calculateIsochrones';
-        var findAddressUrl = 'http://localhost:53758/XServerProxy/xlocate/rs/XLocate/findAddressByText';
-        var searchForReachableObjectsUrl = 'http://localhost:53758/XServerProxy/xroute/rs/XRoute/calculateReachableObjects';
+        var isoUrl = '/XServerProxy/xroute/rs/XRoute/calculateIsochrones';
+        var findAddressUrl = '/XServerProxy/xlocate/rs/XLocate/findAddressByText';
+        var searchForReachableObjectsUrl = '/XServerProxy/xroute/rs/XRoute/calculateReachableObjects';
 
         map.on('click', onMapClick);
 
