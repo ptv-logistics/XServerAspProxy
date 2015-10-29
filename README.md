@@ -5,7 +5,7 @@ This can be useful when accessing xServer behind a firewall, allow cross-domain 
 add some load-balancing or fail-over, tile-caching, etc. 
 You can also use your own authorization or inject xServer credentials inside the middleware.
 For example, you can add your xserver internet token and don't have to expose it in JavaScript.
-The web-client can still use xServer in exactly same way as it does for a direct access.
+The web-client can still use xServer in exactly same way as it does for a direct access. See here for more infos: http://xserver.ptvgroup.com/en-uk/cookbook/best-practices/xserver-internet-with-different-frontend-architectures/
 
 The JavaScript sample-code is based on https://github.com/ptv-logistics/PoiLocator, but all calls go
 through the XServerProxy.ashx rather than calling xServer internet directly. 
@@ -24,9 +24,9 @@ middleware that hosts the web page.
 
 ## To use this code in your own project
 1. Add the the XServerProxy handler code to your ASP.NET project
-2. Add a rewrite rule in your [Web.config](https://github.com/ptv-logistics/XServerAspProxy/blob/master/Web.config#L14-17)
+2. Add a rewrite rule in your [Web.config](https://github.com/ptv-logistics/XServerAspProxy/blob/master/Web.config#L14-#17)
 3. Adapt the code for your xServer infrasctructure. I've added sample for 
-[xServer on-premise](https://github.com/ptv-logistics/XServerAspProxy/blob/master/XServerProxy.ashx.cs#L75-93)
-and [xServer internet](https://github.com/ptv-logistics/XServerAspProxy/blob/master/XServerProxy.ashx.cs#L62-73)
+[xServer on-premise](https://github.com/ptv-logistics/XServerAspProxy/blob/master/XServerProxy.ashx.cs#L75-#93)
+and [xServer internet](https://github.com/ptv-logistics/XServerAspProxy/blob/master/XServerProxy.ashx.cs#L62-#73)
 3. Make your xServer internet requests with the relative url, like */XServerProxy/WMS/WMS* or
 */XServerProxy/xlocate/rs/XLocate/findAddressByText*.
