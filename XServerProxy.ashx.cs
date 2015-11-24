@@ -28,7 +28,7 @@ namespace XServerAspProxy
             // var url = BuildXServerInternetRequestUrl(type, request); // case xserver internet
 
             // Case 2: your on-premise xServer
-            //string url = BuildXServerOnPremiseRequest(type, request);
+            //string url = BuildXServerOnPremiseRequestUrl(type, request);
 
             // Case 3: our internal demo server, dont't use for production!
             string url = "http://80.146.239.180/" + request;
