@@ -2,7 +2,11 @@
 // Copyright (c) 2011 PTV Planung Transport Verkehr AG
 //--------------------------------------------------------------
 
+using System;
+using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Services;
@@ -25,41 +29,51 @@ namespace XServerAspProxy
             string request = Regex.Match(context.Request.RawUrl, "(?<=/XServerProxy/).*").ToString();
 
             // Case 1: xServer internet
-            // var url = BuildXServerInternetRequestUrl(type, request); // case xserver internet
+            var token = "<your xserver-internet token>";
+            var host = BuildXServerInternetHost(type, request); // case xserver internet
 
             // Case 2: your on-premise xServer
-            //string url = BuildXServerOnPremiseRequestUrl(type, request);
+            //var host = BuildXServerOnPremiseHost(type, request);
 
             // Case 3: our internal demo server, dont't use for production!
-            string url = "http://80.146.239.180/" + request;
+            // var host = "http://176.95.37.53/";
 
             var original = context.Request;
-            var newRequest = (HttpWebRequest)WebRequest.Create(url);
+
+            var backendRequest = new HttpRequestMessage();
 
             // in case of xserver internet or xserver /w basic auth inject your user/pwd or token
-            // newRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes("xtok:" + "<your token here>"));
+            if (type == "WMS")
+                request = request + "&xtok=" + token; // wms requests need the token as parameter
+            else
+                backendRequest.Headers.TryAddWithoutValidation("Authorization", "Basic "
+                    + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes("xtok:" + token)));
 
-            newRequest.ContentType = original.ContentType;
-            newRequest.Method = original.HttpMethod;
+            var client = HttpClientPool.GetHttpClient(host);
+            backendRequest.RequestUri = new Uri(request, UriKind.Relative);
+
+            backendRequest.Method = (original.HttpMethod == "POST") ? HttpMethod.Post : HttpMethod.Get;
+            if(!string.IsNullOrEmpty(original.ContentType))
+                backendRequest.Headers.TryAddWithoutValidation("Content-Type", original.ContentType);
 
             // copy the data for post
-            if (original.HttpMethod == "POST")
-                using (var reqStream = newRequest.GetRequestStream())
-                {
-                    original.InputStream.CopyTo(reqStream);
-                }
+            if (backendRequest.Method == HttpMethod.Post)
+                backendRequest.Content = new StreamContent(original.InputStream);
 
             // make the request
-            using (var newResponse = newRequest.GetResponse())
-            using (var respStream = newResponse.GetResponseStream())
+            var response = client.SendAsync(backendRequest).Result;
+            if (response.IsSuccessStatusCode)
             {
-                // copy the response data
-                context.Response.ContentType = newResponse.ContentType;
-                respStream.CopyTo(context.Response.OutputStream);
+                if (response.Content.Headers.ContentType != null)
+                    context.Response.ContentType = response.Content.Headers.ContentType.ToString();
+
+                response.Content.CopyToAsync(context.Response.OutputStream).Wait();
             }
+
+            context.Response.StatusCode = (int)response.StatusCode;
         }
 
-        public string BuildXServerInternetRequestUrl(string type, string request)
+        public string BuildXServerInternetHost(string type, string request)
         {
             string cluster = "eu-n-test";
 
@@ -69,10 +83,10 @@ namespace XServerAspProxy
                 request = request + "&xtok=" + "<insert your token>"; // wms requests need the token as parameter
             }
 
-            return string.Format("https://{0}-{1}.cloud.ptvgroup.com/{2}", type, cluster, request);
+            return string.Format("https://{0}-{1}.cloud.ptvgroup.com/", type, cluster);
         }
 
-        public string BuildXServerOnPremiseRequestUrl(string type, string request)
+        public string BuildXServerOnPremiseHost(string type, string request)
         {
             string ip = "127.0.0.1";
             int port;
@@ -89,7 +103,7 @@ namespace XServerAspProxy
                     break;
             }
 
-            return string.Format("http://{0}:{1}/{2}", ip, port, request);
+            return string.Format("http://{0}:{1}/{2}", ip, port);
         }
 
         public bool IsReusable
