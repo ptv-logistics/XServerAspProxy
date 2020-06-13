@@ -3,11 +3,9 @@
 //--------------------------------------------------------------
 
 using System;
-using System.IO;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Services;
 
@@ -21,9 +19,9 @@ namespace XServerAspProxy
     /// </summary>
     [WebService(Namespace = "http://tempuri.org/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
-    public class XServerProxy : IHttpHandler
+    public class XServerProxy : HttpTaskAsyncHandler
     {
-        public void ProcessRequest(HttpContext context)
+        public override async Task ProcessRequestAsync(HttpContext context)
         {
             string type = Regex.Match(context.Request.RawUrl, "(?<=/XServerProxy/).*?(?=/)").ToString();
             string request = Regex.Match(context.Request.RawUrl, "(?<=/XServerProxy/).*").ToString();
@@ -61,13 +59,13 @@ namespace XServerAspProxy
                 backendRequest.Content = new StreamContent(original.InputStream);
 
             // make the request
-            var response = client.SendAsync(backendRequest).Result;
+            var response = await client.SendAsync(backendRequest);
             if (response.IsSuccessStatusCode)
             {
                 if (response.Content.Headers.ContentType != null)
                     context.Response.ContentType = response.Content.Headers.ContentType.ToString();
 
-                response.Content.CopyToAsync(context.Response.OutputStream).Wait();
+                await response.Content.CopyToAsync(context.Response.OutputStream);
             }
 
             context.Response.StatusCode = (int)response.StatusCode;
@@ -104,14 +102,6 @@ namespace XServerAspProxy
             }
 
             return string.Format("http://{0}:{1}/{2}", ip, port);
-        }
-
-        public bool IsReusable
-        {
-            get
-            {
-                return true;
-            }
         }
     }
 }
